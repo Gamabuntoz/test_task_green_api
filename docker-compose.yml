@@ -1,0 +1,29 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  gateway:
+    build: ./gateway
+    restart: always
+    hostname: gateway
+    env_file:
+      - .example.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+  user:
+    build: ./user
+    restart: always
+    hostname: user
+    env_file:
+      - .example.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rabbitmq
